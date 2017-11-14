@@ -1,0 +1,726 @@
+<div class="easyui-layout" data-options="fit:true, border:20">
+	<div style="width: 250px;"
+		data-options="region:'west', split:true, minWidth:250, title:'部门信息列表'">
+		<ul id="Department_Tree_DepartList" class="easyui-tree"
+			data-options="lines:true, url:'System/GetDepartments.action',
+			onLoadSuccess:function(node){
+			var firstnode = $('#Department_Tree_DepartList').tree('find', 0);
+			if (firstnode==null){
+			}else{
+            	$('#Department_Tree_DepartList').tree('select', firstnode.target);
+            	bjhnd.department.DepartmentTreeClick(firstnode);
+            }
+		}, 
+	onClick:bjhnd.department.DepartmentTreeClick,
+	onContextMenu: bjhnd.department.DepartTreePopmenu"></ul>
+	</div>
+	<div data-options="region:'center'">
+	<div class="easyui-layout" data-options="fit:true, border:false">
+		<div data-options="region:'center', split:true, border:false, title:'人员信息列表'">
+		<table id="Department_datagrid_users" class="easyui-datagrid"
+			data-options="toolbar:'#Department_toolbar_users', fit:true, pagination:true,
+													pageNumber:1, pageSize:100, pageList:[100,200,300, 400,500],
+													singleSelect:true,
+													onRowContextMenu:function(e, index, row){e.preventDefault();},
+													onSelect:bjhnd.department.UserDataGridClick,
+													onLoadSuccess:bjhnd.department.userDatagridLoadSuccess">
+			<thead>
+				<tr>
+					<th
+						data-options="field:'id', width:50, halign:'center', align:'left', order:'asc'">流水号</th>
+					<th
+						data-options="field:'name', width:80, halign:'center', align:'left'">姓名</th>
+					<th
+						data-options="field:'sex', width:40, halign:'center', align:'left'">性别</th>
+					<th
+						data-options="field:'userId', width:80, halign:'center', align:'left'">帐号</th>
+					<th
+						data-options="field:'post', width:80, halign:'center', align:'left'">职位</th>
+					<th
+						data-options="field:'mobilePhone', width:100, halign:'center', align:'left'">移动电话</th>
+					<th
+						data-options="field:'officePhone', width:100, halign:'center', align:'left'">办公电话</th>
+					<th
+						data-options="field:'address', width:250, halign:'left', align:'left'">通讯地址</th>
+						<th
+						data-options="field:'activeState', width:40, halign:'center', align:'center', hidden:true">状态</th>
+					<th
+						data-options="field:'StateImage', width:40, halign:'center', align:'center',  
+      		     formatter:bjhnd.department.UserStateFormatter">状态</th>
+      		     
+				</tr>
+			</thead>
+		</table>
+		<div id="Department_toolbar_users">
+			<table style="border-spacing: 0px; border-collapse: 0px;">
+				<tr>
+					<td>
+					<a id="department_linkbutton_add" title="添加一个新的用户" href="#"
+						class="easyui-linkbutton easyui-tooltip"
+						data-options="iconCls:'icon-add', plain:true, disabled:true"
+						onclick="bjhnd.department.UserListToolbarEvent('add');">添加</a></td>
+					<td>
+					<a id="department_linkbutton_edit" title="修改一个选中的用户" href="#"
+						class="easyui-linkbutton easyui-tooltip"
+						data-options="iconCls:'icon-edit', plain:true, disabled:true"
+						onclick="bjhnd.department.UserListToolbarEvent('edit');">修改</a></td>
+					<td>
+					<a id="department_linkbutton_del" title="删除一个选中的用户" href="#"
+						class="easyui-linkbutton easyui-tooltip"
+						data-options="iconCls:'icon-remove', plain:true, disabled:true"
+						onclick="bjhnd.department.UserListToolbarEvent('del');">删除</a></td>
+					<td>
+						<div class="datagrid-btn-separator"></div>
+					</td>
+					<td>
+					<a  id="department_linkbutton_resetpwd" title="重置一个选中的用户密码" href="#"
+						class="easyui-splitbutton easyui-tooltip"
+						data-options="iconCls:'icon-resetpwd',  disabled:true, menu:'#department_toolbar_menu'"
+						onclick="bjhnd.department.UserListToolbarEvent('resetpwd');">重置密码</a>
+						<div id="department_toolbar_menu">
+							<div onclick="bjhnd.department.UserListToolbarEvent('backpwd');">最后一次使用的密码</div>
+						</div>
+					</td>
+					<td>
+					<a  id="department_linkbutton_lock" title="锁定一个选中的用户" href="#"
+						class="easyui-linkbutton easyui-tooltip"
+						data-options="iconCls:'icon-lock', plain:true, disabled:true"
+						onclick="bjhnd.department.UserListToolbarEvent('lock');">锁定</a></td>
+					<td>
+					<a id="department_linkbutton_unlock" title="解锁一个选中的用户" href="#"
+						class="easyui-linkbutton easyui-tooltip"
+						data-options="iconCls:'icon-unlock', plain:true, disabled:true"
+						onclick="bjhnd.department.UserListToolbarEvent('unlock');">解锁</a>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div id="Deprment_Popmenu_edit" class="easyui-menu"
+			style="width: 80px;"
+			data-options="onClick:bjhnd.department.DepartPopmenu_Event">
+			<div data-options="name:'add',iconCls:'icon-add'">添加</div>
+			<div data-options="name:'edit',iconCls:'icon-edit'">修改</div>
+			<div data-options="name:'del',iconCls:'icon-remove'">删除</div>
+		</div>
+		<!-- 对话框定义 -->
+		<!-- 部门树对话框定义 -->
+		<div id="Department_Dialog_Depa" class="easyui-dialog"
+			style="padding: 10px; width: 230px;"
+			data-options="modal:true,closed:true,cache:false,
+		buttons: [{
+                    text:'确定',
+                    iconCls:'icon-ok',
+                    handler:bjhnd.department.DepartmentFormPost
+                },{
+                    text:'取消',
+                    iconCls:'icon-cancel',
+                    handler:function(){
+                        $('#Department_Dialog_Depa').dialog('close');
+                    }
+                }]">
+			<form id="Department_form_depart" method="post" novalidate
+				autocomplete="off">
+				<div class="fitem">
+					<!-- 当文本框失去焦点后，生成拼音首字母 -->
+					名称：<input class="easyui-validatebox" name="name"
+						id="Department_TextBox_Name"
+						data-options="prompt:'名称长度为.',required:true,validType:'length[3,255]'"
+						onblur="$('#Department_form_depart').form('load',{code:bjhnd.core.makePy(this.value)});" />
+				</div>
+				<div class="fitem">
+					编码：<input class="easyui-validatebox" name="code"
+						id="Department_TextBox_Code"
+						data-options="prompt:'编码长度为.',required:true,validType:'length[3,255]'" />
+				</div>
+				<input style="display: none;" name="parentId" /> <input
+					style="display: none;" name="fullPathName" /> <input
+					style="display: none;" name="fullPathId" />
+				<!-- 编辑模式 -->
+				<input style="display: none;" name="mode"
+					id="Department_textbox_editmode" />
+			</form>
+		</div>
+		<!-- 用户列表对话框表单定义 -->
+		<div id="Department_Dialog_User" class="easyui-dialog"
+			style="padding: 5px; width: 385px;"
+			data-options="modal:true,closed:true,cache:false,
+		buttons: [{
+                    text:'确定',
+                    iconCls:'icon-ok',
+                    handler:bjhnd.department.UserFormPost
+                },{
+                    text:'取消',
+                    iconCls:'icon-cancel',
+                    handler:function(){
+                        $('#Department_Dialog_User').dialog('close');
+                    }
+                }]">
+			<form id="Department_form_User" method="post" novalidate
+				autocomplete="off">
+				<div class="easyui-panel" style="padding: 0px; text-align: right;"
+					data-options="title:'帐户信息',width:365">
+					<table>
+						<tr>
+							<td>
+							姓名：<input style="width:100px" class="easyui-validatebox" name="name"
+							id="Department_TextBox_userName"
+							data-options="missingMessage:'必须输入姓名', invalidMessage:'帐号长度必须在6-10之间',required:true,validType:'length[1,10]'"
+							onblur="$('#Department_form_User').form('load',{userId:bjhnd.core.toPinyin(this.value)});" /></td>
+							<td>
+							帐号：<input style="width:100px" class="easyui-validatebox" name="userId"
+							id="Department_TextBox_userId"
+							data-options="missingMessage:'必须输入帐号', invalidMessage:'帐号长度必须在6-20之间',required:true,validType:'length[6,20]'" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+							&nbsp;&nbsp;&nbsp;&nbsp;
+							密码：<input style="width:100px" type="password" class="easyui-validatebox" name="userPassword"
+							id="Department_TextBox_userPassword"
+							data-options="missingMessage:'必须输入密码',invalidMessage:'密码长度必须在6-20之间',required:true,validType:'length[6,20]'"/>
+							</td>
+						    <td>
+						    密码确认：<input style="width:100px" type="password" class="easyui-validatebox" name="rePassword"
+							id="Department_TextBox_confirmPassword"
+							validType="equalTo['#Department_TextBox_userPassword']" invalidMessage="两次输入密码不匹配"
+							required="required"/>
+						    </td>
+						</tr>
+					</table>
+				</div>
+				<div class="easyui-panel" style="padding: 5px; text-align: right;"
+					data-options="title:'人员信息',width:365">
+					<table>
+						<tr>
+							<td>职位：<input style="width: 100px;"
+								class="easyui-validatebox" name="post"
+								id="Department_TextBox_userPost"
+								data-options="invalidMessage:'职位长度必须在1-50之间',validType:'length[1,50]'" />
+							</td>
+							<td>
+							性别：
+							<select class="easyui-combobox" name="sex" id="Department_TextBox_userSex"
+							data-options="panelHeight:'auto', width:103">
+							<option selected="selected" value="男">男</option>
+							<option value="女">女</option>
+						</select></td>
+						</tr>
+						<tr>
+							<td>移动电话：<input style="width: 100px;"
+								class="easyui-validatebox" name="mobilePhone"
+								id="Department_TextBox_userMobilePhone"
+								data-options="validType:'length[1,40]'" />
+							</td>
+							<td>办公电话：<input style="width: 100px;"
+								class="easyui-validatebox" name="officePhone"
+								id="Department_TextBox_userOfficePhone"
+								data-options="validType:'length[1,255]'" />
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+							通讯地址：<input style="width: 268px;"
+								class="easyui-validatebox" name="address"
+								id="Department_TextBox_userAddress"
+								data-options="invalidMessage:'职位长度必须在1-255之间',validType:'length[1,255]'" />
+							</td>
+						</tr>
+					</table>
+					<input style="display: none;" name="departmentId" />
+					<!-- 编辑模式 -->
+					<input style="display: none;" name="mode"
+						id="Department_textbox_Usereditmode" />
+				</div>
+
+			</form>
+		</div>
+		<!-- 重置密码对话框 -->
+		<div id="Department_Dialog_ResetPwd" class="easyui-dialog"
+			style="padding: 5px; width: 215px; text-align: right;"
+			data-options="modal:true,closed:true,cache:false,
+		buttons: [{
+                    text:'确定',
+                    iconCls:'icon-ok',
+                    handler:bjhnd.department.ResetPwdFormPost
+                },{
+                    text:'取消',
+                    iconCls:'icon-cancel',
+                    handler:function(){
+                        $('#Department_Dialog_ResetPwd').dialog('close');
+                    }
+                }]">
+			<form id="Department_form_ResetPwd" method="post" novalidate
+				autocomplete="off">
+				<div class="fitem">
+				&nbsp;&nbsp;&nbsp;&nbsp;
+							密码：<input style="width:100px" type="password" class="easyui-validatebox" name="userPassword"
+							id="Department_TextBox_resPwd"
+							data-options="missingMessage:'必须输入密码',invalidMessage:'密码长度必须在6-20之间',required:true,validType:'length[6,20]'"/>
+							</div>
+							<div class="fitem">
+						    密码确认：<input style="width:100px" type="password" class="easyui-validatebox" name="rePassword"
+							id="Department_TextBox_rePwd"
+							validType="equalTo['#Department_TextBox_resPwd']" invalidMessage="两次输入密码不匹配"
+							required="required"/>
+							</div>
+							<input name="id" style="display: none;"/>
+							<input name="userId" style="display: none;"/>
+							<input name="mode" id="Department_TextBox_resPwdMode" style="display: none;"/>
+			</form>
+		</div>
+	</div>
+	</div>
+	
+	</div>
+</div>
+<!-- js定义区域 -->
+<script>
+bjhnd.department = {}; //定义department命名空间
+
+
+bjhnd.department.depart_Dialog_obj = $("#Department_Dialog_Depa");
+bjhnd.department.depart_Tree_obj = $("#Department_Tree_DepartList");
+bjhnd.department.depart_Form_obj = $('#Department_form_depart');
+bjhnd.department.user_DataGrid_obj = $("#Department_datagrid_users");
+bjhnd.department.user_Dialog_obj = $("#Department_Dialog_User");
+bjhnd.department.user_Form_obj = $("#Department_form_User");
+bjhnd.department.repwd_Dialog_obj = $("#Department_Dialog_ResetPwd");
+bjhnd.department.repwd_Form_obj = $("#Department_form_ResetPwd");
+//用户ID
+bjhnd.department.userID = undefined;
+//部门ID
+bjhnd.department.departmentID = undefined;
+
+bjhnd.department.userRowIndex = undefined;
+
+bjhnd.department.FormMode = ""; //表单处理模式，add,del,edit
+
+//部门树的点击事件。
+bjhnd.department.DepartmentTreeClick = function(node) {
+	if (node.id != null || node.id != undefined)
+		bjhnd.department.departmentID = node.id;
+	bjhnd.department.user_DataGrid_obj.datagrid({
+		url : 'System/GetUsers.action?departmentID=' + node.id
+	});
+	bjhnd.department.UpdateToolbarState();
+};
+bjhnd.department.DepartTreePopmenu = function(e, node) {
+	e.preventDefault();
+	$(this).tree('select', node.target);
+	$('#Deprment_Popmenu_edit').menu('show', {
+		left : e.pageX,
+		top : e.pageY
+	});
+};
+//部门树左键菜单
+bjhnd.department.DepartPopmenu_Event = function(item) {
+	var selectedNode = bjhnd.department.depart_Tree_obj.tree("getSelected");
+	switch (item.name) {
+	case "add": //添加部门
+	{
+		bjhnd.department.depart_Form_obj.form('clear');
+		bjhnd.department.depart_Form_obj.form("load", {
+			parentId : selectedNode.id,
+			fullPathName : selectedNode.attributes.fullname,
+			fullPathId : selectedNode.attributes.fullpath,
+			mode : item.name
+		});
+		bjhnd.department.depart_Dialog_obj.dialog({
+			iconCls : 'icon-department'
+		});
+		bjhnd.department.depart_Dialog_obj.dialog("open").dialog(
+				"setTitle", "添加部门");
+		break;
+	}
+	case "edit": //编辑部门
+	{
+		bjhnd.department.depart_Form_obj.form('clear');
+		bjhnd.department.depart_Form_obj.form("load", {
+			parentId : selectedNode.id,
+			fullPathName : selectedNode.attributes.fullname,
+			fullPathId : selectedNode.text,
+			name : selectedNode.text,
+			code : selectedNode.attributes.code,
+			mode : item.name
+		});
+		bjhnd.department.depart_Dialog_obj.dialog({
+			iconCls : 'icon-department'
+		});
+		bjhnd.department.depart_Dialog_obj.dialog("open").dialog(
+				"setTitle", "编辑部门");
+		break;
+	}
+	case "del"://删除部门
+	{
+		$.messager.confirm("确认",
+				"你确定删除名称为<b style='color:red;font:bold;'>["
+						+ selectedNode.text + "]</b>的部门吗？",
+				function(result) {
+					if (result) {
+						bjhnd.department.depart_Form_obj.form('clear');
+						bjhnd.department.depart_Form_obj.form("load", {
+							name : selectedNode.text,
+							code : selectedNode.attributes.code,
+							parentId : selectedNode.id,
+							mode : item.name
+						});
+						bjhnd.department.DepartmentFormPost();
+					}
+				});
+		break;
+	}
+	}
+};
+//部门表单提交
+bjhnd.department.DepartmentFormPost = function() {
+	var selectedNode = bjhnd.department.depart_Tree_obj.tree("getSelected");
+	editMode = $("#Department_textbox_editmode").val();
+	PostUrl = editMode == "add" ? "System/SaveDepartment.action"
+			: editMode == "del" ? "System/DeleteDepartment.action"
+					: "System/UpdateDepartment.action";
+	bjhnd.department.depart_Form_obj
+			.form(
+					'submit',
+					{
+						url : PostUrl,
+						onSubmit : function() {
+							return $(this).form("validate");
+						},
+						success : function(result) {
+							var resultJson = $.parseJSON(result);
+							if (resultJson.success) {
+								if (editMode == "add") {
+									//如果当前节点关闭状态，侧展开节点，不做节点添加，因为展开节点会从数据库取数据
+									//新增加的节点可以被加载出来。
+									if (selectedNode.state == "closed")
+									{
+										bjhnd.department.depart_Tree_obj.tree("expand",selectedNode.target);
+									    var tempNode = bjhnd.department.depart_Tree_obj.tree("find", resultJson.data.id);
+									    bjhnd.department.depart_Tree_obj.tree('select', tempNode.target);
+									}
+									else
+									//如当前节点是展开状态，则添加一个新的节点上去。
+									{
+										bjhnd.department.depart_Tree_obj.tree(
+														"append",
+														{
+															parent : selectedNode.target,
+															data : {
+																id : resultJson.data.id,
+																text : resultJson.data.name,
+																iconCls : resultJson.data.icon,
+																attributes : {
+																	code : resultJson.data.code,
+																	fullname : resultJson.data.fullPathName,
+																	fullpath : resultJson.data.fullPathId
+																}
+															}
+														});
+										var tempNode = bjhnd.department.depart_Tree_obj.tree("find", resultJson.data.id);
+									    bjhnd.department.depart_Tree_obj.tree('select', tempNode.target);
+									}
+								} else if (editMode == "del") //删除
+								{
+									bjhnd.department.depart_Tree_obj.tree(
+											"remove", selectedNode.target);
+								} else //更新
+								{
+									bjhnd.department.depart_Tree_obj
+											.tree(
+													"update",
+													{
+														target : selectedNode.target,
+														text : resultJson.data.name,
+														attributes : {
+															code : resultJson.data.code,
+															fullname : resultJson.data.fullPathName,
+															fullpath : selectedNode.attributes.fullpath
+														}
+													});
+								}
+
+								bjhnd.department.depart_Dialog_obj
+										.dialog("close");
+							} else {
+								$.messager.alert("错误", resultJson.message,
+										"error");
+							}
+						}
+					});
+};
+//用户表单提交
+bjhnd.department.UserFormPost = function() {
+	//var selectedNode = bjhnd.department.depart_Tree_obj.tree("getSelected");
+	editMode = $("#Department_textbox_Usereditmode").val();
+	PostUrl = editMode == "add" ? "System/SaveUser.action"
+			: editMode == "del" ? "System/DeleteUser.action"
+					: "System/UpdateUser.action";
+	bjhnd.department.user_Form_obj
+			.form(
+					'submit',
+					{
+						url : PostUrl,
+						onSubmit : function() {
+							return $(this).form("validate");
+						},
+						success : function(result) {
+							var resultJson = $.parseJSON(result);
+							if (resultJson.success) {
+									switch(editMode)
+									{
+									case "add":
+										{
+										//如果提交成功 则往 DataGrid中插入新的记录
+											bjhnd.department.user_DataGrid_obj.datagrid("appendRow", resultJson.data);
+											//添加完毕后，选中最后一行
+											rowIndex = bjhnd.department.user_DataGrid_obj.datagrid("getRows").length -1;
+											bjhnd.department.user_DataGrid_obj.datagrid("selectRow",rowIndex);
+											bjhnd.department.user_Dialog_obj.dialog("close");
+											break;
+										}
+									case "edit":
+										{
+											//如果修改成功，则更新界面数据
+											bjhnd.department.user_DataGrid_obj.datagrid("updateRow", 
+													{index:bjhnd.department.userRowIndex,row:
+													{
+														sex:resultJson.data.sex, post:resultJson.data.post,
+														mobilePhone:resultJson.data.mobilePhone, officePhone:resultJson.data.officePhone,
+														address:resultJson.data.address
+													}});
+											bjhnd.department.user_Dialog_obj.dialog("close");
+											break;
+										}
+									case "del":
+										{
+											bjhnd.department.user_DataGrid_obj.datagrid("deleteRow",bjhnd.department.userRowIndex); 
+											break;
+										}
+									}
+								}
+							else
+							{
+								$.messager.alert("误错", resultJson.message, "error");	
+							}
+						}
+					});
+};
+//重置密码表单提交
+bjhnd.department.ResetPwdFormPost = function() {
+	mode = $("#Department_TextBox_resPwdMode").val();
+	PostUrl = mode == "resetpwd" ? "System/ResetUserPassword.action" : 
+			  mode == "lock" ? "System/LockUser.action" : 
+			  mode == "unlock" ? "System/UnLockUser.action" :"System/BackUserPassword.action";
+	bjhnd.department.repwd_Form_obj
+			.form(
+					'submit',
+					{
+						url : PostUrl,
+						dataType:'json',
+						onSubmit : function() {
+							return $(this).form("validate");
+						},
+						success : function(result) {
+						    var resultJson = $.parseJSON(result);
+							if (resultJson.success) {
+								str = resultJson.message;
+								str = str.replaceAll("&lt;","<");
+								str = str.replaceAll("&gt;",">");
+								$.messager.alert("成功", str, "info");
+								switch(mode)
+								{
+									case "lock":
+										{
+											bjhnd.department.user_DataGrid_obj.datagrid("updateRow", 
+											{index:bjhnd.department.userRowIndex,row:
+											{
+												activeState:1, StateImage:1
+											}});
+											bjhnd.department.UpdateToolbarState();
+											break;
+										}
+									case "unlock":
+									{
+										bjhnd.department.user_DataGrid_obj.datagrid("updateRow", 
+										{index:bjhnd.department.userRowIndex,row:
+										{
+											activeState:0, StateImage:0
+										}});
+										bjhnd.department.UpdateToolbarState();
+										break;
+									}
+									default:
+									{
+										bjhnd.department.repwd_Dialog_obj.dialog("close");
+										break;
+									}
+								}
+							}
+							else
+							{
+								$.messager.alert("误错", resultJson.message, "error");	
+							}
+						}
+					});
+};
+//用户信息列表 状态格式化方法
+bjhnd.department.UserStateFormatter = function(value, row, index) {
+	return row.activeState == 0 ? "<div title='正常可用' class='icon-unlock easyui-tooltip'>&nbsp;</div>"
+			: "<div title='锁定不可用' class='icon-lock easyui-tooltip'>&nbsp;</div>";
+};
+//工具栏按钮事件
+bjhnd.department.UserListToolbarEvent = function(id) {
+	var row = bjhnd.department.user_DataGrid_obj.datagrid("getSelected");
+	switch(id)
+	{
+	case "add":
+		{
+			
+			$("#Department_TextBox_userName").removeAttr("disabled");
+			$("#Department_TextBox_userId").removeAttr("disabled");
+			$("#Department_TextBox_userPassword").removeAttr("disabled");
+			$("#Department_TextBox_confirmPassword").removeAttr("disabled");
+			bjhnd.department.user_Form_obj.form("reset");
+			bjhnd.department.user_Form_obj.form("load", {mode:id, departmentId: bjhnd.department.departmentID});
+			bjhnd.department.user_Dialog_obj.dialog("open").dialog("setTitle", "添加新用户");
+			break;
+		}
+	case "edit":
+		{
+			//只允许修改 人员信息，帐户信息不允许做变更 禁掉所有帐户信息框
+			bjhnd.department.user_Form_obj.form("reset");
+			bjhnd.department.user_Form_obj.form("load", {mode:id, userPassword:'********', rePassword:'********',departmentId:row.id,
+														name:row.name, userId:row.userId, sex:row.sex, post:row.post,
+														mobilePhone:row.mobilePhone, officePhone:row.officePhone, address:row.address});
+			$("#Department_TextBox_userName").attr("disabled", "disabled");
+			$("#Department_TextBox_userId").attr("disabled", "disabled");
+			$("#Department_TextBox_userPassword").attr("disabled", "disabled");
+			$("#Department_TextBox_confirmPassword").attr("disabled", "disabled");
+			bjhnd.department.user_Dialog_obj.dialog("open").dialog("setTitle", "修改<b style='color:red;'>[" + row.name + "]</b>用户信息");
+			break;
+		}
+	case "del":
+		{
+			$.messager.confirm("提示", "你确定删除姓名为<b style='color:red;font:bold;'>["	+ row.name + "]</b>的用户吗？",function(r)
+			{
+				if (r)
+				{
+					bjhnd.department.user_Form_obj.form("reset");
+					bjhnd.department.user_Form_obj.form("load", {mode:id, userPassword:'********', rePassword:'********',departmentId:row.id,
+																 name:'********', userId:'********'});
+					bjhnd.department.UserFormPost();	
+				}
+			});
+			break;
+		}
+	case "resetpwd":
+		{
+			bjhnd.department.repwd_Form_obj.form("reset");
+			bjhnd.department.repwd_Dialog_obj.dialog("open").dialog("setTitle", "重置<b style='color:red;'>[" + row.name + "]</b>用户密码");
+			bjhnd.department.repwd_Form_obj.form("load", {id:row.id, userId:row.userId, mode:id});
+			break;
+		}
+	case "backpwd":
+		{
+			bjhnd.department.repwd_Form_obj.form("load", {id:row.id, userId:row.userId, mode:id, userPassword:'********',rePassword:'********'});
+			$.messager.confirm("提示","你确定将<b style='color:red;'>[" + row.name + "]</b>用户密码置为最后一次使用的密码吗？", function(r)
+			{
+				if (r)
+					bjhnd.department.ResetPwdFormPost();
+			});
+			break;
+		}
+	case "lock":
+		{
+			bjhnd.department.repwd_Form_obj.form("load", {id:row.id, userId:row.userId, mode:id, userPassword:'********',rePassword:'********'});
+			$.messager.confirm("提示","你确定将<b style='color:red;'>[" + row.userId + "]</b>用户锁定吗？", function(r)
+			{
+				if (r)
+					bjhnd.department.ResetPwdFormPost();
+			});
+			break;
+		}
+	case "unlock":
+	{
+		bjhnd.department.repwd_Form_obj.form("load", {id:row.id, userId:row.userId, mode:id, userPassword:'********',rePassword:'********'});
+		$.messager.confirm("提示","你确定将<b style='color:red;'>[" + row.userId + "]</b>解除锁定状态吗？", function(r)
+		{
+			if (r)
+				bjhnd.department.ResetPwdFormPost();
+		});
+		break;
+	}
+	}
+};
+//用户DBgrid单击
+bjhnd.department.UserDataGridClick = function(rowIndex, rowData)
+{
+	bjhnd.department.userRowIndex = rowIndex;
+	if (rowData.id != null || rowData.id != undefined)
+		bjhnd.department.userID = rowData.id;
+	else
+		bjhnd.department.userID = undefined;
+	bjhnd.department.UpdateToolbarState();
+};
+bjhnd.department.userDatagridLoadSuccess = function(data)
+{
+	//默认选中第一行 并且激发单击事件
+	if (data.total > 0)
+	{
+		bjhnd.department.user_DataGrid_obj.datagrid("selectRow", 0);
+	}
+	else
+		bjhnd.department.UserDataGridClick(0, data);
+};
+//更新工具栏按钮状态
+bjhnd.department.UpdateToolbarState = function()
+{
+	var row = bjhnd.department.user_DataGrid_obj.datagrid("getSelected");
+	button_add = $("#department_linkbutton_add"); //工具栏添加按钮
+	button_edit = $("#department_linkbutton_edit"); //工具栏编辑按钮
+	button_del = $("#department_linkbutton_del"); //工具栏删除按钮
+	button_resetpwd = $("#department_linkbutton_resetpwd"); //工具栏删除按钮
+	button_lock = $("#department_linkbutton_lock");//工具栏锁定按钮
+	button_unlock = $("#department_linkbutton_unlock");//工具栏解锁按钮
+	//如果部门ID为空 侧添加按钮为禁用否则为可用
+	if (bjhnd.department.departmentID == undefined || bjhnd.department.departmentID == null)
+		button_add.linkbutton('disable');
+	else
+		button_add.linkbutton('enable');
+	if (bjhnd.department.userID == undefined || bjhnd.department.userID == null)
+	{
+		button_edit.linkbutton('disable');
+		button_del.linkbutton('disable');
+		button_resetpwd.splitbutton('disable');
+	}
+	else
+	{
+		button_edit.linkbutton('enable');
+		button_del.linkbutton('enable');
+		button_resetpwd.splitbutton('enable');
+	}
+	if ((row != null || row != undefined) && (row.activeState != null || row.activeState != undefined))
+	{
+		if (row.activeState == 0)
+		{
+			button_lock.linkbutton("enable");
+			button_unlock.linkbutton("disable");
+		}
+		else
+		if (row.activeState == 1)
+		{
+			button_lock.linkbutton("disable");
+			button_unlock.linkbutton("enable");
+		}
+	}
+};
+$(document).ready(function()
+{
+	$.extend($.fn.validatebox.defaults.rules, 
+	{
+        /*两次输入密码验证*/
+        equalTo: { validator: function (value, param) { return $(param[0]).val() == value; }, message: '字段不匹配' }
+    });
+	
+});
+</script>	

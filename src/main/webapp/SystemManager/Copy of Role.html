@@ -1,0 +1,278 @@
+<div class="easyui-layout" data-options="fit:true">
+	<div style="width: 250px;"
+		data-options="region:'west', split:true, minWidth:250, title:'系统角色列表'">
+		<ul id="Role_Tree_Role" class="easyui-tree" data-options="url:'System/GetRoles.action', 
+		onContextMenu:bjhnd.role.RoleTreePopmenu, lines:true,
+		onClick:bjhnd.role.RoleTreeClick"></ul>
+		<div id="Role_Popmenu" class="easyui-menu"
+			style="width: 80px;"
+			data-options="onClick:bjhnd.role.RolePopmenu_Event">
+			<div data-options="name:'add', iconCls:'icon-add'">添加
+				<div>
+					<div data-options="name:'addGroup', iconCls:'icon-group'">组</div>
+					<div data-options="name:'addRole', iconCls:'icon-role'">角色</div>
+				</div>
+			</div>
+			<div data-options="name:'edit',iconCls:'icon-edit'">修改</div>
+			<div data-options="name:'del',iconCls:'icon-remove'">删除</div>
+		</div>
+		<!-- 添加角色对话框 -->
+		<div id="Role_Dialog_Role" class="easyui-dialog"
+			style="padding: 10px; width: 230px;"
+			data-options="modal:true,closed:true,cache:false,
+		buttons: [{
+                    text:'确定',
+                    iconCls:'icon-ok',
+                    handler:bjhnd.role.RoleFormPost
+                },{
+                    text:'取消',
+                    iconCls:'icon-cancel',
+                    handler:function(){
+                        $('#Role_Dialog_Role').dialog('close');
+                    }
+                }]">
+			<form id="Role_Form_Role" method="post" novalidate
+				autocomplete="off">
+				<div class="fitem">
+					名称：<input class="easyui-validatebox" name="name"
+						id="Role_TextBox_RoleName"
+						data-options="prompt:'名称长度为.',required:true,validType:'length[2,50]'"
+						onblur="$('#Role_Form_Role').form('load',{code:bjhnd.core.makePy(this.value)});" />
+				</div>
+				<div class="fitem">
+					编码：<input class="easyui-validatebox" name="code"
+						id="Role_TextBox_RoleCode"
+						data-options="prompt:'编码长度为.',required:true,validType:'length[2,50]'" />
+				</div>
+				<input name="type" style="display:none"/>
+				<input name="parentId"  style="display:none"/>
+			</form>
+		</div>
+		</div>
+	<div data-options="region:'center', border: false">
+		<div class="easyui-layout" data-options="fit:true">
+			<div data-options="region:'north', title:'已授权用户', height:300, split:true, collapsible: false">
+			<table id="Role_Datagrid_user" data-options="toolbar:'#Role_tools_user',pagination:true,
+													pageNumber:1, pageSize:100, pageList:[100,200,300, 400,500],
+													singleSelect:true, fit:true, url:'System/GetUserRole.action'" class="easyui-datagrid">
+			<thead>
+				<tr>
+					<th
+						data-options="field:'name', width:80, halign:'center', align:'center', sortable:true">姓名</th>
+					<th
+						data-options="field:'userId', width:80, halign:'center', align:'center'">帐号</th>
+					<th
+						data-options="field:'fullPathName', width:300, halign:'left', align:'left'">所属部门</th>
+					<th
+						data-options="field:'userName', width:80, halign:'center', align:'left'">授权人</th>
+					<th
+						data-options="field:'time', width:140, halign:'center', align:'left'">授权时间</th>
+				</tr>
+			</thead>
+		</table>
+		<div id="Role_tools_user">
+				<a id="role_linkbutton_user_Role" class="easyui-linkbutton" data-options="iconCls:'icon-role-yes', plain:true"
+				onclick="bjhnd.role.UserAccreditEvent('add');">授权</a>
+				<a id="role_linkbutton_user_unRole" class="easyui-linkbutton" data-options="iconCls:'icon-role-no', plain:true" 
+				 onclick="bjhnd.role.UserAccreditEvent('del');">取消授权</a>
+				 <input class="easyui-searchbox" data-options="prompt:'请输入检索内容',menu:'#mm'" style="width:300px"></input>
+   				 <div id="mm">
+   				     <div data-options="name:'name'">按姓名检索</div>
+   				     <div data-options="name:'code'">按帐号检索</div>
+  				  </div>
+			</div>
+			<!-- 角色授权对话框 -->
+		<div id="Role_dialog_userAccredit" class="easyui-dialog" data-options="closed:true"
+		style="width:300px;height:600px;">
+			<ui id="Role_tree_deparUser" data-options="fit:true, lines:true, onlyLeafCheck:true, checkbox:true"/>
+		</div>
+			</div>
+			<div data-options="region:'center', title:'已授权功能模块', split:true">
+			<table class="easyui-datagrid" data-options="toolbar:'#Role_tools_module',pagination:true, pageNumber:1, pageSize:100
+														, pageList:[100,200,300, 400,500], singleSelect:true, fit:true">
+			<thead>
+				<tr>
+					<th
+						data-options="field:'name', width:80, halign:'center', align:'left'">名称</th>
+					<th
+						data-options="field:'sex', width:40, halign:'center', align:'left'">版本</th>
+					<th
+						data-options="field:'mobilePhone', width:100, halign:'center', align:'left'">发布人</th>
+					<th
+						data-options="field:'officePhone', width:100, halign:'center', align:'left'">发布时间</th>
+					<th
+						data-options="field:'userId', width:80, halign:'center', align:'left'">授权时间</th>
+					<th
+						data-options="field:'post', width:80, halign:'center', align:'left'">授权人</th>
+				</tr>
+			</thead>
+		</table>
+		<div id="Role_tools_module">
+				<a id="role_linkbutton_module_Role" class="easyui-linkbutton" data-options="iconCls:'icon-role-yes', plain:true">授权</a>
+				<a id="role_linkbutton_module_unRole" class="easyui-linkbutton" data-options="iconCls:'icon-role-no', plain:true">取消授权</a>
+				<input class="easyui-searchbox" data-options="prompt:'请输入检索内容',menu:'#mm1'" style="width:300px"></input>
+   				 <div id="mm1">
+   				     <div data-options="name:'name'">按姓名检索</div>
+   				     <div data-options="name:'code'">按帐号检索</div>
+  				  </div>
+			</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+bjhnd.role = {};
+bjhnd.role.role_Tree_obj = $("#Role_Tree_Role");
+
+bjhnd.role.role_Dialog_obj = $("#Role_Dialog_Role");
+bjhnd.role.role_Form_obj = $("#Role_Form_Role");
+
+bjhnd.role.role_Datagrid_userObj = $("#Role_Datagrid_user");
+
+bjhnd.role.userAccredit_dialog_obj = $("#Role_dialog_userAccredit");
+
+bjhnd.role.Role_tree_deparUser_obj = $("#Role_tree_deparUser");
+
+
+bjhnd.role.RoleTreePopmenu = function(e, node)
+{
+	e.preventDefault();
+	var popmenu_obj = $('#Role_Popmenu');
+	var item = popmenu_obj.menu("findItem", "添加");
+	popmenu_obj.menu("enableItem", item.target);
+	if (node.attributes.type === 0)
+	{
+		popmenu_obj.menu("disableItem", item.target);
+	}
+	
+	bjhnd.role.role_Tree_obj.tree('select', node.target);
+	
+	popmenu_obj.menu('show', {
+		left : e.pageX,
+		top : e.pageY
+	});
+}
+//更新按工具栏状态
+bjhnd.role.UpdateToolbar = function()
+{
+		
+}
+bjhnd.role.RoleTreeClick = function(node)
+{
+	//显示已授权的用户列表
+	bjhnd.role.UpdateToolbar
+	bjhnd.role.role_Datagrid_userObj.datagrid({url : 'System/GetUserRole.action?roleID=' + node.id});
+}
+//角色树菜单 处理
+bjhnd.role.RolePopmenu_Event = function(item)
+{
+	var selectedNode = bjhnd.role.role_Tree_obj.tree("getSelected");
+	bjhnd.role.role_Form_obj.form("reset");
+	switch(item.name)
+	{
+		case "addGroup":
+			{
+				bjhnd.role.FormMode = "add";
+				bjhnd.role.role_Dialog_obj.dialog({iconCls:item.iconCls});
+				bjhnd.role.role_Form_obj.form("load", {type:'1', parentId:selectedNode.id});
+				bjhnd.role.role_Dialog_obj.dialog("open").dialog("setTitle","添加角色组");			
+				break;
+			}
+		case "addRole":
+			{
+				bjhnd.role.FormMode = "add";
+				bjhnd.role.role_Dialog_obj.dialog({iconCls:item.iconCls});
+				bjhnd.role.role_Form_obj.form("load", {type:'0', parentId:selectedNode.id});
+				bjhnd.role.role_Dialog_obj.dialog("open").dialog("setTitle","添加角色");			
+				break;
+			}
+		case "edit":
+		{
+			bjhnd.role.FormMode = "edit";
+			bjhnd.role.role_Dialog_obj.dialog({iconCls:'icon-role'});
+			bjhnd.role.role_Form_obj.form("load", {parentId:selectedNode.id, 
+														 name:selectedNode.text, code:selectedNode.attributes.code});
+			bjhnd.role.role_Dialog_obj.dialog("open").dialog("setTitle","编辑<b style='color:red'>[" + selectedNode.text + "]</b>信息");			
+			break;
+		}
+		case "del":
+		{
+			$.messager.confirm("删除", "你确定删除<b style='color:red;'>[" + selectedNode.text +"]</b>节点吗？", function(e)
+					{
+						if (e)
+							bjhnd.role.RoleFormPost();	
+					});
+			break;
+		}
+	}
+}
+//角色表单提交
+bjhnd.role.RoleFormPost = function()
+{
+	var selectedNode = bjhnd.role.role_Tree_obj.tree("getSelected");
+	switch(bjhnd.role.FormMode)
+	{
+		case "add": {PostUrl = "System/SaveRole.action";break;}
+		case "del": {PostUrl = "System/DeleteRole.action";break;}
+		case "edit": {PostUrl = "System/UpdateRole.action";break;}
+	}
+	bjhnd.role.role_Form_obj.form(
+			'submit',
+			{
+				url : PostUrl,
+				onSubmit : function() {
+					return $(this).form("validate");
+				},
+				success : function(result) 
+				{
+					var resultJson = $.parseJSON(result);
+					if (resultJson.success)
+					{
+						if (bjhnd.role.FormMode == "add")
+						{
+							if (selectedNode.state == "closed")
+								bjhnd.role.role_Tree_obj
+										.tree("expand",
+												selectedNode.target);
+							else
+							//如当前节点是展开状态，则添加一个新的节点上去。
+							{
+								bjhnd.role.role_Tree_obj
+										.tree(
+												"append",
+												{
+													parent : selectedNode.target,
+													data : {
+														id : resultJson.data.id,
+														text : resultJson.data.name,
+														iconCls : resultJson.data.type == 0 ? "icon-role" : "icon-group",
+														attributes :{code : resultJson.data.code, type : resultJson.data.type}
+													}
+												});
+							}
+						} else if (bjhnd.role.FormMode == "edit")
+						{
+							bjhnd.role.role_Tree_obj
+							.tree("update",
+									{
+										target : selectedNode.target,
+										text : resultJson.data.name,
+										attributes :{code : resultJson.data.code}
+									});
+						} else if (bjhnd.role.FormMode == "del")
+						{
+							
+						}
+						$('#Role_Dialog_Role').dialog('close');
+					}
+					else
+					  $.messager.alert("错误", resultJson.message, "error");	
+				}
+			});
+}
+bjhnd.role.UserAccreditEvent =  function(item)
+{	
+	bjhnd.role.Role_tree_deparUser_obj.tree({data:[],url:'System/GetDepartUser.action'});
+	bjhnd.role.userAccredit_dialog_obj.dialog("open").dialog("setTitle", "为角色<b style='color:red'>[abcd]</b>指定授权用户");
+}
+</script>

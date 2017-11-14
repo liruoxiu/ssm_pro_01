@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration >
+  <properties resource="jdbc.properties"/>  
+  <classPathEntry location="E:\ojdbc6.jar"/>
+  <context id="context1" >
+  	<commentGenerator>  
+     <!-- 去除自动生成的注释 -->  
+        <property name="suppressAllComments" value="true" />  
+    </commentGenerator> 
+<!--     <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">  
+    <property name="searchString" value="Example$" />  
+    <property name="replaceString" value="Criteria" />   
+    </plugin>   -->  
+	<jdbcConnection driverClass="${driverClassName}" connectionURL="${jdbc_url}" userId="${jdbc_username}" password="${jdbc_password}" />
+    <javaModelGenerator targetPackage="com.bjhdab.Model.TruckCoalManage" targetProject="ACIIS/src" />
+    <sqlMapGenerator targetPackage="com.bjhdab.Map.TruckCoalManage" targetProject="ACIIS/src" />
+    <javaClientGenerator targetPackage="com.bjhdab.Dao.TruckCoalManage" targetProject="ACIIS/src" type="XMLMAPPER" />  
+<!--     <table schema="aciis" tableName="???" domainObjectName="???" enableCountByExample="false" enableUpdateByExample="false"  
+    enableDeleteByExample="false" enableSelectByExample="false"  
+    selectByExampleQueryId="false"> 
+      <columnOverride column="???" property="???" />
+    </table>  -->  
+	<table schema="OBERACIIS_FUEL" tableName="t_truckenter" enableCountByExample="true"  enableUpdateByExample="true"  enableUpdateByPrimaryKey="true"  enableDeleteByExample="false" enableDeleteByPrimaryKey="true" enableSelectByExample="true" selectByExampleQueryId="false"  />
+<!--     <table schema="OBERACIIS_FUEL" tableName="T_MODULE"/> 
+    <table schema="OBERACIIS_FUEL" tableName="T_ROLE"/> 
+    <table schema="OBERACIIS_FUEL" tableName="T_ROLE_MODULE"/> 
+    <table schema="OBERACIIS_FUEL" tableName="T_USER_ROLE"/> 
+    <table schema="OBERACIIS_FUEL" tableName="T_USERS"/>  
+    <table schema="OBERACIIS_FUEL" tableName="V_DEPARTMENT_USER"/> 
+    <table schema="OBERACIIS_FUEL" tableName="V_USER_ROLE"/>  -->
+   </context>
+</generatorConfiguration>

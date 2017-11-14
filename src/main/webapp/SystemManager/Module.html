@@ -1,0 +1,438 @@
+<div class="easyui-layout" data-options="fit:true, border:20">
+	<div data-options="region:'west', title:'系统功能模块', split:true, width:300">
+	<div class="easyui-layout" data-options="fit:true">
+		<div data-options="region:'center'">
+			<ul id="module_tree_moduleTree" class="easyui-tree" data-options="url:'System/getModule.action',lines:true,
+			 onContextMenu:bjhnd.module.moduleTreeContextMenu,
+			onSelect:bjhnd.module.moduleTreeOnSelect"></ul>
+	<div id="module_menu_popmenu" class="easyui-menu" data-options="onClick:bjhnd.module.popmenuEvent">
+		<div data-options="iconCls:'icon-add'">
+		添加
+			<div>
+				<div data-options="name:'addSystem',iconCls:'icon-apps'">子系统</div>
+				<div data-options="name:'addModule', iconCls:'icon-app'">功能模块</div>
+			</div>
+		</div>
+		<div data-options="name:'edit',iconCls:'icon-edit'">修改</div>
+		<div data-options="name:'del',iconCls:'icon-remove'">删除</div>
+		<div class="menu-sep"></div>
+		<div data-options="name:'access',iconCls:'icon-tip'">坊问控制</div>
+	</div>
+		</div>
+		<div data-options="region:'south', title:'模块信息', height:240, collapsible:false">
+            <table id="module_property_module" class="easyui-datagrid" data-options="fit:true, singleSelect:true">
+            	<thead>
+            		<tr>
+            			<th data-options="field:'name', fixed:true">名称</th>
+            			<th data-options="field:'value'">值</th>
+            		</tr>
+            	</thead>
+            </table>
+		</div>
+	</div>
+	</div>
+	<div data-options="region:'center', title:'授权使用角色'">
+	<div class="easyui-layout" data-options="fit:true">
+		<div data-options="region:'center'">
+		<table id="module_DataGrid_moduleRole" class="easyui-datagrid"
+			data-options="
+                idField: 'id',
+                fit:true, singleSelect:true, 
+                onSelect:bjhnd.module.moduleRoleOnSelect,
+                onLoadSuccess:function(data)
+                {
+                	if (data.total > 0)
+                	{
+                		$(this).datagrid('selectRow', 0);
+                	}
+                	else
+                	bjhnd.module.moduleRoleOnSelect(0, {roleId:-999});
+                }">
+                <thead>
+                	<tr>
+                		<th data-options="field:'id', width:80">流水号
+                		</th>
+                		<th data-options="field:'name', width:120">名称
+                		</th>
+                		<th data-options="field:'time', width:120">授权时间
+                		</th>
+                		<th data-options="field:'userName', width:100">操作人
+                		</th>
+                		<th data-options="field:'roleId', width:100, hidden:true">操作人
+                		</th>
+                	</tr>
+                </thead>
+		</table>
+		</div>
+		<div data-options="region:'south', height: 300, title:'授权用户', split:true">
+			<table id="module_DataGrid_userList" class="easyui-datagrid"
+			data-options="
+                method: 'post',
+                idField: 'id',
+                fit:true, singleSelect:true">
+			<thead>
+				<tr>
+					<th
+						data-options="field:'id', width:50, halign:'center', align:'left', order:'asc'">流水号</th>
+					<th
+						data-options="field:'name', width:80, halign:'center', align:'left'">姓名</th>
+					<th
+						data-options="field:'sex', width:40, halign:'center', align:'left'">性别</th>
+					<th
+						data-options="field:'userId', width:80, halign:'center', align:'left'">帐号</th>
+					<th
+						data-options="field:'fullPathName', width:250, halign:'left', align:'left'">所属部门</th>
+					<th
+						data-options="field:'post', width:80, halign:'center', align:'left'">职位</th>
+					<th
+						data-options="field:'mobilePhone', width:100, halign:'center', align:'left'">移动电话</th>
+					<th
+						data-options="field:'officePhone', width:100, halign:'center', align:'left'">办公电话</th>
+					<th
+						data-options="field:'address', width:250, halign:'left', align:'left'">通讯地址</th>
+					<th
+						data-options="field:'activeState', width:40, halign:'center', align:'center', hidden:true">状态</th>
+						
+					<!-- <th
+						data-options="field:'StateImage', width:40, halign:'center', align:'center',  
+      		     formatter:bjhnd.department.UserStateFormatter">状态</th> -->
+      		     
+				</tr>
+			</thead>
+		</table>
+		</div>
+	</div>
+	
+	</div>
+	<!-- 子系统模块开始 -->
+	<div id="Module_Dialog_editSystem" class="easyui-dialog" data-options="closed:true,modal:true, iconCls:'icon-apps', 
+			buttons: [{
+                    text:'确定',
+                    iconCls:'icon-ok',
+                    handler:bjhnd.module.systemFormPost
+                },{
+                    text:'取消',
+                    iconCls:'icon-cancel',
+                    handler:function(){
+                        $('#Module_Dialog_editSystem').dialog('close');
+                    }
+                }]"
+		style="width:310px; padding:10px;">
+		<form id="Module_Form_editSystem" method="post">
+				子系统名称：<input id="editsName" name="name" type="text" style="width:200px" class="easyui-textbox" data-options="invalidMessage:'名称长度必须小于100字符',required:true,validType:'length[1,100]'"/>
+			<div style="height:10px;">
+			&nbsp;
+			</div>
+			子系统描述：<input id="editsDescription" name="description" type="text" style="width:200px; height:80px;" class="easyui-textbox" data-options="multiline:true"/>
+			<input type="hidden" name="parentId">
+		</form>
+	</div>
+	
+	
+	
+	<div id="Module_Dialog_editModule" class="easyui-dialog" data-options="closed:true,modal:true, iconCls:'icon-app',
+			buttons: [{
+                    text:'确定',
+                    iconCls:'icon-ok',
+                    handler:bjhnd.module.moduleFormPost
+                },{
+                    text:'取消',
+                    iconCls:'icon-cancel',
+                    handler:function(){
+                        $('#Module_Dialog_editModule').dialog('close');
+                    }
+                }]"
+		style="width:290px; padding:10px;text-align: right;">
+		<form id="Module_Form_editModule" method="post">
+				模块名称：<input id="editName" name="name" type="text" style="width:190px" class="easyui-textbox" data-options="invalidMessage:'名称长度必须小于100字符',required:true,validType:'length[1,100]'"/>
+			<div style="height:10px;"></div>
+				URL地址：<input id="editModuleUrl" name="moduleUrl" type="text" style="width:190px" class="easyui-textbox"/>				
+			<div style="height:10px;"></div>
+			模块描述：<input id="editDescription" name="description" type="text" style="width:190px; height:80px;" class="easyui-textbox" 
+			data-options="multiline:true"/>		
+			<input name="parentId" type="hidden" />									
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+var moduletreetype = "";
+bjhnd.module = {
+	moduleTreeOnSelect : function(node)
+	{
+		moduletreetype = node.attributes.type;
+		//alert(node.id);
+		bjhnd.module.showModulProperty(node);
+		$("#module_DataGrid_moduleRole").datagrid({url:'System/getModuleRole.action?id=' + node.id});		
+	},
+	moduleRoleOnSelect : function(index, data)
+	{
+		$("#module_DataGrid_userList").datagrid({url:"System/getRoleUsers.action?id=" + data.roleId});
+	},
+	showModulProperty : function(data)
+	{
+		var row =[];
+		var attr = data.attributes;
+		switch(attr.type)
+		{
+			case 1: {
+				row = [{name:"名称" ,value:data.text},
+			           {name:"发布时间", value:attr.published},
+			           {name:"发布人", value:attr.releaseUserId},
+			           {name:"访问控制", value:attr.control == true ? "已启用" : "未启用"},
+			           {name:"描述", value:attr.description}];
+				break;
+			} 
+			case 2:{
+				row = [{name:"名称" ,value:data.text},
+			           {name:"版本", value:attr.version},
+			           {name:"发布时间", value:attr.published},
+			           {name:"发布人", value:attr.releaseUserId},
+			           {name:"URL", value:attr.moduleUrl},
+			           {name:"访问控制", value:attr.control == true ? "已启用" : "未启用"},
+			           {name:"描述", value:attr.description}];
+				break;
+			}
+			default:
+				{
+					row = [{name:"名称" ,value:data.text}];
+					break;
+				}
+		}
+		$("#module_property_module").datagrid({data:row});
+	},
+	moduleFormPost : function(){
+		var formObj = $("#Module_Form_editModule");
+		var selectNode = $("#module_tree_moduleTree").tree("getSelected");
+		formObj.form("load", {parentId:selectNode.id});
+		formObj.form(
+				'submit',
+				{
+					url:bjhnd.module.editMode == "edit" ? "System/updateModule.action" : "System/saveModule.action",
+					onSubmit : function() {
+						return $(this).form("validate");
+					},
+					success : function(result) {
+						var jsonData = $.parseJSON(result);
+						if (jsonData.success)
+						{
+							if (bjhnd.module.editMode == "edit")
+							{
+								$("#module_tree_moduleTree").tree("update", {target: selectNode.target,
+								 
+								 	text: jsonData.data.name,
+								 	attributes:
+								 	{
+								 		type:moduletreetype,
+								 		published:jsonData.data.published,
+								 		releaseUserId:jsonData.data.releaseUserId,
+								 		description:jsonData.data.description,
+								 		moduleUrl:jsonData.data.moduleUrl,
+								 		version:jsonData.data.version
+								 	}
+								 });
+							}
+							else
+							{
+								$("#module_tree_moduleTree").tree("append", {parent: selectNode.target, data:
+								 {
+								 	id : jsonData.data.id, text: jsonData.data.name,
+								 	iconCls: jsonData.data.icon, attributes:
+								 	{
+								 		published:jsonData.data.published,
+								 		releaseUserId:jsonData.data.releaseUserId,
+								 		description:jsonData.data.description,
+								 		type:jsonData.data.type,
+								 		moduleUrl:jsonData.data.moduleUrl,
+								 		version:jsonData.data.version
+								 	}
+								 }});
+								var node = $("#module_tree_moduleTree").tree("find", jsonData.data.id);
+								$("#module_tree_moduleTree").tree('select', node.target);
+							}
+							 $('#Module_Dialog_editModule').dialog('close');
+						}
+						else
+						$.messager.alert("错误", jsonData.message, "error"); 
+            		}
+				});
+	},
+	systemFormPost : function()
+	{
+		var formObj = $("#Module_Form_editSystem");
+		var selectNode = $("#module_tree_moduleTree").tree("getSelected");
+		formObj.form("load", {parentId:selectNode.id});
+		formObj.form(
+				'submit',
+				{
+					url:bjhnd.module.editMode == "edit" ? "System/updateSystem.action": "System/saveSystem.action",
+					onSubmit : function() {
+						return $(this).form("validate");
+					},
+					success : function(result) {
+						var jsonData = $.parseJSON(result);
+						if (jsonData.success)
+						{ 
+							if (bjhnd.module.editMode == "edit")
+							{
+							 $("#module_tree_moduleTree").tree("update", {target: selectNode.target, 
+								 	text: jsonData.data.name,
+								 	attributes:
+								 	{
+								 		type:moduletreetype,
+								 		published:jsonData.data.published,
+								 		releaseUserId:jsonData.data.releaseUserId,
+								 		description:jsonData.data.description
+								 	}
+								 });
+							}
+							else
+							{
+								$("#module_tree_moduleTree").tree("append", {parent: selectNode.target,data:
+									{
+										id : jsonData.data.id,
+										text: jsonData.data.name,
+									 	iconCls: jsonData.data.icon, attributes:
+									 	{
+									 		published:jsonData.data.published,
+									 		releaseUserId:jsonData.data.releaseUserId,
+									 		description:jsonData.data.description,
+									 		type:jsonData.data.type
+									 	}
+									}
+								});
+								var node = $("#module_tree_moduleTree").tree("find", jsonData.data.id);
+								$("#module_tree_moduleTree").tree('select', node.target);
+							}
+							 $('#Module_Dialog_editSystem').dialog('close');
+						}
+						else
+               			$.messager.alert("错误", jsonData.message, "error"); 
+            		}
+				});
+	},
+	//树右键菜单事件
+	popmenuEvent : function(item)
+	{
+		var dialog_editSystem = $("#Module_Dialog_editSystem");
+		var dialog_editModule = $("#Module_Dialog_editModule");
+		var formObjSystem = $("#Module_Form_editSystem");
+		var formObjModule = $("#Module_Form_editModule");
+		var desc = "";
+		var selectNode = $("#module_tree_moduleTree").tree("getSelected");
+		formObjSystem.form("clear");
+		formObjModule.form("clear");
+		switch(item.name)
+		{
+			case "addSystem":{
+					dialog_editSystem.dialog("open").dialog("setTitle", "添加子系统");	
+					bjhnd.module.editMode = "add";
+					break;
+				}
+			case "addModule":{
+				dialog_editModule.dialog("open").dialog("setTitle", "添加功能模块");	
+				bjhnd.module.editMode = "add";
+				break;
+			}
+			case "edit":{
+				desc = selectNode.attributes.description != null ? selectNode.attributes.description : "";
+				bjhnd.module.editMode = "edit";
+				//alert(selectNode.attributes.type);
+				switch(selectNode.attributes.type)
+				{
+					case 1 :
+					{
+						dialog_editSystem.dialog("open").dialog("setTitle", "编辑<b style='color:red'>[" + selectNode.text + "]</b>子系统");
+ 						formObjSystem.form("load", {
+							name: selectNode.text,
+							description: desc.replaceAll("<br/>", "\n")
+						});
+						break;
+					}
+					case 2 :
+					{
+						dialog_editModule.dialog("open").dialog("setTitle", "编辑<b style='color:red'>[" + selectNode.text + "]</b>功能模块");
+						formObjModule.form("load", {
+							name: selectNode.text,
+							moduleUrl:selectNode.attributes.moduleUrl,
+							description: desc.replaceAll("<br/>", "\n")
+						});
+						break;
+					}
+				}			
+				break;
+			}
+			case "del":
+			{
+				$.messager.confirm("提示", "确定删除<b style='color:red'>[" + selectNode.text + "]</b>功能吗？<br/><br/><b style='color:red'>系统所有用户将无法使用该功能！</b>", 
+						function(r)
+						{
+							if (r)
+								$.ajax({
+						             type: "POST",
+						             url: "System/deleteModule.action?id=" + selectNode.id,
+						             dataType: "json",
+						             success: function(data)
+						             {
+						            	 if (data.success)
+						            		  $("#module_tree_moduleTree").tree("remove", selectNode.target);
+						            	 else
+						            		 $.messager.alert("错误", "删除<b style='color:red'>[" + selectNode.text + "]</b>功能失败！<br/>"
+						            				 + data.message, "error");
+						             }
+									});
+						});
+				break;
+			}
+			case "access":
+				{
+					if (!selectNode.attributes.control)
+						mess = "<b style='color:red'>是否启动权限控制？如果启动该项，所有用户在未授与相应角色情况下，将无法访问该功能！</b>";
+					else
+						mess = "<b style='color:red'>是否停用权限控制？如果停用该项，所有用户都可以访问该功能！</b>";
+					$.messager.confirm("提示", mess, 
+							function(r)
+							{
+								if (r)
+								{
+									$.ajax({
+							             type: "POST",
+							             url: "System/updateAccessCotrol.action?id=" + selectNode.id,
+							             dataType: "json",
+							             success: function(data)
+							             {
+							            	 selectNode.attributes.control = !selectNode.attributes.control; 
+							            	 $.messager.alert("错误", data.message, "info");
+							             }
+										});
+								}
+							});
+					break;
+				}
+		} 
+
+	},
+	moduleTreeContextMenu : function(e, node) {
+	e.preventDefault();
+			var menuObj = $('#module_menu_popmenu');
+			$(this).tree('select', node.target);
+			var menuItem = {};
+			menuItem["sytemItem"] = menuObj.menu("findItem", "子系统");
+			menuItem["moduleItem"] = menuObj.menu("findItem", "功能模块");
+			menuItem["editItem"] = menuObj.menu("findItem", "修改");
+			menuItem["delItem"] = menuObj.menu("findItem", "删除");
+			$.each(menuItem, function(index, val) {
+				menuObj.menu("enableItem", val.target);
+				if (node.attributes.type == "2"
+						&& (index == "sytemItem" || index == "moduleItem"))
+					menuObj.menu("disableItem", val.target);
+				else if (node.attributes.type == "0" && (index == "editItem" || index == "delItem"))
+					menuObj.menu("disableItem", val.target);
+			});
+			menuObj.menu('show', {
+				left : e.pageX,
+				top : e.pageY
+			});
+		}
+	};
+bjhnd.module.editMode = "";
+</script>

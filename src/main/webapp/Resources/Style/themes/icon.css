@@ -1,0 +1,178 @@
+.icon-blank{
+	background:url('icons/blank.gif') no-repeat center center;
+}
+.icon-add{
+	background:url('icons/edit_add.png') no-repeat center center;
+}
+.icon-edit{
+	background:url('icons/pencil.png') no-repeat center center;
+}
+.icon-remove{
+	background:url('icons/edit_remove.png') no-repeat center center;
+}
+.icon-save{
+	background:url('icons/filesave.png') no-repeat center center;
+}
+.icon-cut{
+	background:url('icons/cut.png') no-repeat center center;
+}
+.icon-ok{
+	background:url('icons/ok.png') no-repeat center center;
+}
+.icon-no{
+	background:url('icons/no.png') no-repeat center center;
+}
+.icon-cancel{
+	background:url('icons/cancel.png') no-repeat center center;
+}
+.icon-reload{
+	background:url('icons/reload.png') no-repeat center center;
+}
+.icon-search{
+	background:url('icons/search.png') no-repeat center center;
+}
+.icon-print{
+	background:url('icons/print.png') no-repeat center center;
+}
+.icon-help{
+	background:url('icons/help.png') no-repeat center center;
+}
+.icon-undo{
+	background:url('icons/undo.png') no-repeat center center;
+}
+.icon-redo{
+	background:url('icons/redo.png') no-repeat center center;
+}
+.icon-back{
+	background:url('icons/back.png') no-repeat center center;
+}
+.icon-sum{
+	background:url('icons/sum.png') no-repeat center center;
+}
+.icon-tip{
+	background:url('icons/tip.png') no-repeat center center;
+}
+.icon-filter{
+	background:url('icons/filter.png') no-repeat center center;
+}
+.icon-up{
+	background:url('icons/up.png') no-repeat center center;
+}
+.icon-down{
+	background:url('icons/down.png') no-repeat center center;
+}
+
+.icon-mini-add{
+	background:url('icons/mini_add.png') no-repeat center center;
+}
+.icon-mini-edit{
+	background:url('icons/mini_edit.png') no-repeat center center;
+}
+.icon-mini-refresh{
+	background:url('icons/mini_refresh.png') no-repeat center center;
+}
+
+.icon-department{
+	background:url('icons/custom/department.png') no-repeat center center;
+}
+.icon-house{
+	background:url('icons/custom/house.png') no-repeat center center;
+}
+.icon-lock{
+	background:url('icons/custom/lock.png') no-repeat center center;
+}
+.icon-unlock{
+	background:url('icons/custom/unlock.png') no-repeat center center;
+}
+.icon-resetpwd{
+	background:url('icons/custom/resetpwd.png') no-repeat center center;
+}
+.icon-group{
+	background:url('icons/custom/group.png') no-repeat center center;
+}
+.icon-role{
+	background:url('icons/custom/role.png') no-repeat center center;
+}
+.icon-role-yes{
+	background:url('icons/custom/role_yes.png') no-repeat center center;
+}
+.icon-role-no{
+	background:url('icons/custom/role_no.png') no-repeat center center;
+}
+
+.icon-application{
+	background:url('icons/custom/application_32.png') no-repeat center center;
+}
+
+.icon-flowChart{
+	background:url('icons/custom/flowChart_32.png') no-repeat center center;
+}
+.icon-nodeState{
+	background:url('icons/custom/nodeState_32.png') no-repeat center center;
+}
+
+.icon-process{
+	background:url('icons/custom/process_32.png') no-repeat center center;
+}
+
+.icon-upfile{
+	background:url('icons/custom/upfile.png') no-repeat center center;
+}
+
+.icon-downfile{
+	background:url('icons/custom/downfile.png') no-repeat center center;
+}
+
+.icon-exclamatory{
+	background:url('icons/custom/exclamatory_y.png') no-repeat center center;
+}
+
+.icon-exclamatorr{
+	background:url('icons/custom/exclamatory_r.png') no-repeat center center;
+}
+
+.icon-node-status{
+	background:url('icons/custom/nodeStatus.png') no-repeat center center;
+}
+.icon-apps
+{
+	background:url('icons/custom/applications.png') no-repeat center center;
+}
+.icon-app
+{
+	background:url('icons/custom/application.png') no-repeat center center;
+}
+.icon-system
+{
+	background:url('icons/custom/system.png') no-repeat center center;
+}
+.icon-exitSys
+{
+	background:url('icons/custom/exit.png') no-repeat center center;
+}
+.icon-modifypwd
+{
+	background:url('icons/custom/modifypwd.png') no-repeat center center;
+}
+.icon-lock1
+{
+	background:url('icons/custom/lock1.png') no-repeat center center;
+}
+.login_lock
+{
+	background:url('icons/custom/login_lock.png') no-repeat center center;
+}
+.login_man
+{
+	background:url('icons/custom/login_man.png') no-repeat center center;
+}
+
+.login_warining
+{
+	background:url('icons/custom/warining.png') no-repeat center center;
+}
+
+.login_nowarining
+{
+	background:url('icons/custom/noWarning.png') no-repeat center center;
+}

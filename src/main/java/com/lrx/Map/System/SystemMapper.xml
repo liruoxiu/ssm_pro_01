@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lrx.Dao.System.SystemMapper">
+
+	<resultMap type="com.lrx.Model.System.ModuleRole" id="moduleRole_ResultMap">
+		<id column="ID" property="id" jdbcType="DECIMAL" />
+		<result column="NAME" property="name" jdbcType="VARCHAR" />
+		<result column="TIME" property="time" jdbcType="TIMESTAMP" />
+		<result column="USER_NAME" property="userName" jdbcType="VARCHAR" />
+		<result column="ROLEID" property="roleId" jdbcType="DECIMAL" />
+	</resultMap>
+	<resultMap id="User_ResultMap" type="com.lrx.Model.System.RoleUsers">
+		<id column="ID" property="id" jdbcType="DECIMAL" />
+		<result column="NAME" property="name" jdbcType="VARCHAR" />
+		<result column="MOBILE_PHONE" property="mobilePhone" jdbcType="VARCHAR" />
+		<result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+		<result column="USER_PASSWORD" property="userPassword" jdbcType="VARCHAR" />
+		<result column="ADDRESS" property="address" jdbcType="VARCHAR" />
+		<result column="DEPARTMENT_ID" property="departmentId" jdbcType="DECIMAL" />
+		<result column="HISORY_PASSWORD" property="hisoryPassword" jdbcType="VARCHAR" />
+		<result column="ACTIVE_STATE" property="activeState" jdbcType="DECIMAL" />
+		<result column="POST" property="post" jdbcType="VARCHAR" />
+		<result column="OFFICE_PHONE" property="officePhone" jdbcType="VARCHAR" />
+		<result column="SEX" property="sex" jdbcType="VARCHAR" />
+		<result column="FULL_PATH_NAME" property="fullPathName" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="Module_ResultMap" type="com.lrx.Model.System.TModule" >
+	    <id column="ID" property="id" jdbcType="DECIMAL" />
+	    <result column="NAME" property="name" jdbcType="VARCHAR" />
+	    <result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />
+	    <result column="VERSION" property="version" jdbcType="VARCHAR" />
+	    <result column="DISPLAY_INDEX" property="displayIndex" jdbcType="DECIMAL" />
+	    <result column="MODULE_URL" property="moduleUrl" jdbcType="VARCHAR" />
+	    <result column="ICON" property="icon" jdbcType="VARCHAR" />
+	    <result column="PUBLISHED" property="published" jdbcType="TIMESTAMP" />
+	    <result column="RELEASE_USER_ID" property="releaseUserId" jdbcType="VARCHAR" />
+	    <result column="PARENT_ID" property="parentId" jdbcType="DECIMAL" />
+	    <result column="WORKFLOW_KEY" property="workflowKey" jdbcType="VARCHAR" />
+	    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+	    <result column="ACCESS_CONTROL" property="accessControl" jdbcType="VARCHAR" />
+  </resultMap>
+	<select id="selectModuleRole" resultMap="moduleRole_ResultMap" parameterType="java.lang.Long">
+		SELECT TB2.ID, TB1.NAME, TB2.TIME, TB2.USER_NAME, TB1.ID
+		ROLEID
+		FROM T_ROLE TB1
+		JOIN T_ROLE_MODULE TB2
+		ON TB1.ID = TB2.ROLE_ID
+		WHERE TB2.MODULE_ID = #{id, jdbcType=DECIMAL}
+	</select>
+	<select id="selectRoleUser" resultMap="User_ResultMap" parameterType="java.lang.Long">
+		SELECT TB2.*, TB3.FULL_PATH_NAME FROM
+		T_USER_ROLE TB1 JOIN T_USERS TB2 ON TB2.ID =
+		TB1.USER_ID
+		JOIN T_DEPARTMENT TB3
+		ON TB3.ID =
+		TB2.DEPARTMENT_ID
+		WHERE TB1.ROLE_ID = #{id, jdbcType=DECIMAL}
+	</select>
+	<!-- <select id="selectSysteMenu" resultMap="Module_ResultMap">
+	
+		SELECT * FROM HND_SHORTCAL.T_MODULE WHERE ID IN(SELECT TB2.MODULE_ID FROM HND_SHORTCAL.T_USER_ROLE TB1 
+      		 JOIN HND_SHORTCAL.T_ROLE_MODULE TB2 ON TB2.ROLE_ID = TB1.ROLE_ID 
+		WHERE TB1.USER_ID = (SELECT ID FROM HND_SHORTCAL.T_USERS
+        WHERE REGEXP_LIKE(USER_ID, #{userId, jdbcType=VARCHAR}, 'i')) GROUP BY TB2.MODULE_ID) 
+        <if test="type != null">
+        	AND TYPE = #{type, jdbcType=VARCHAR}
+        </if>
+         AND PARENT_ID = #{id, jdbcType=DECIMAL} 
+        ORDER BY DISPLAY_INDEX
+	</select> -->
+	<select id="selectSysteMenu" resultMap="Module_ResultMap">
+	
+		SELECT * FROM T_MODULE WHERE PARENT_ID = #{id, jdbcType=DECIMAL}
+        <if test="type != null">
+        	AND TYPE = #{type, jdbcType=VARCHAR}
+        </if>
+        ORDER BY DISPLAY_INDEX DESC
+	</select>
+	<select id="selectRoleModuleIDS" resultMap="moduleRole_ResultMap"  parameterType="java.lang.String">
+	
+		SELECT TB2.MODULE_ID ID FROM T_USER_ROLE TB1 
+      		 JOIN T_ROLE_MODULE TB2 ON TB2.ROLE_ID = TB1.ROLE_ID 
+		WHERE TB1.USER_ID = (SELECT ID FROM T_USERS
+        WHERE USER_ID = upper(#{userId, jdbcType=VARCHAR})) GROUP BY TB2.MODULE_ID
+	</select>
+
+</mapper>
