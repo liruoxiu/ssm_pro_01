@@ -15,20 +15,27 @@ import com.lrx.Model.System.TModule;
 import com.lrx.Service.System.ModuleService;
 
 @Controller
+@RequestMapping("/System")
 public class ModuleAction {
 	@Autowired
 	private ModuleService moduleService;
+	
+	@RequestMapping("/Module")
+	public String GetPageModule() {
+		return "SystemManager/Module";
+	}	
+	
 	/***
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "/System/getModule", method = RequestMethod.POST)
+	@RequestMapping(value = "/getModule", method = RequestMethod.POST)
 	@ResponseBody
 	public Object getModule() {
 		return moduleService.getModule(-1L);
 	}
 	
-	@RequestMapping(value="/System/saveModule", method = RequestMethod.POST)
+	@RequestMapping(value="/saveModule", method = RequestMethod.POST)
 	@ResponseBody
 	public Object saveModule(TModule module,HttpSession session)
 	{
@@ -40,7 +47,7 @@ public class ModuleAction {
 		module.setVersion("1.0");
 		return moduleService.saveModule(module,userName);
 	}
-	@RequestMapping(value="/System/saveSystem", method = RequestMethod.POST)
+	@RequestMapping(value="/saveSystem", method = RequestMethod.POST)
 	@ResponseBody
 	public Object saveSystem(TModule module,HttpSession session)
 	{
@@ -51,41 +58,41 @@ public class ModuleAction {
 		module.setIcon("icon-apps");
 		return moduleService.saveModule(module,userName);
 	}
-	@RequestMapping(value="/System/updateSystem", method = RequestMethod.POST)
+	@RequestMapping(value="/updateSystem", method = RequestMethod.POST)
 	@ResponseBody
 	public Object updateSystem(TModule module)
 	{
 		return moduleService.updateSystem(module);
 	}
-	@RequestMapping(value="/System/updateModule", method = RequestMethod.POST)
+	@RequestMapping(value="/updateModule", method = RequestMethod.POST)
 	@ResponseBody
 	public Object updateModule(TModule module)
 	{
 		return moduleService.updateSystem(module);
 	}
-	@RequestMapping(value="/System/deleteModule", method = RequestMethod.POST)
+	@RequestMapping(value="/deleteModule", method = RequestMethod.POST)
 	@ResponseBody
 	public Object deleteModule(long id) {
 		return moduleService.deleteModule(id);
 	}
 	
-	@RequestMapping(value="/System/getModuleById", method = RequestMethod.POST)
+	@RequestMapping(value="/getModuleById", method = RequestMethod.POST)
 	@ResponseBody
 	public Object getModuleById(long id){
 		Object moduleInfo= moduleService.getModuleById(id);
 		return moduleInfo;
 	}
-	@RequestMapping(value="/System/getModuleRole", method = RequestMethod.POST)
+	@RequestMapping(value="/getModuleRole", method = RequestMethod.POST)
 	@ResponseBody
 	public Object getModuleRole(long id){
 		return moduleService.getModuleRole(id);
 	}
-	@RequestMapping(value="/System/getRoleUsers", method = RequestMethod.POST)
+	@RequestMapping(value="/getRoleUsers", method = RequestMethod.POST)
 	@ResponseBody
 	public Object getRoleUsers(long id){
 		return moduleService.getRoleUsers(id);
 	}
-	@RequestMapping(value="/System/updateAccessCotrol", method = RequestMethod.POST)
+	@RequestMapping(value="/updateAccessCotrol", method = RequestMethod.POST)
 	@ResponseBody
 	public Object updateAccessCotrol(long id){
 		return moduleService.updateAccessCotrol(id);

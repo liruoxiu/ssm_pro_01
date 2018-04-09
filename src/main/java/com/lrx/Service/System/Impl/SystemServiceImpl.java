@@ -66,6 +66,7 @@ public class SystemServiceImpl implements SystemService {
 		}
 		return rootMap;
 	}
+	
 	private List<Map<String, Object>> getSysteMenu(long id, String userId) {
 		final List<TModule> moduleList;
 		Map<String, Object> MenuItem;
@@ -76,15 +77,15 @@ public class SystemServiceImpl implements SystemService {
 		List<ModuleRole> roleList = systemMapper.selectRoleModuleIDS(userId);
 		for (TModule module : moduleList) {
 			MenuItem = new HashMap<String, Object>();
-			MenuItem.put("name", module.getName());
+			MenuItem.put("title", module.getName());
 			MenuItem.put("id", module.getId());
-			MenuItem.put("url", module.getModuleUrl());
+			MenuItem.put("href", module.getModuleUrl());
 			MenuItem.put("icon", module.getIcon());
 			MenuItem.put("description", module.getDescription());
 			//生成子菜单
 			List<Map<String, Object>> subMenu = this.getSubMenu(module.getId(), userId);
 			if (subMenu.size() > 0) {
-				MenuItem.put("subMenu", subMenu);
+				MenuItem.put("children", subMenu);
 			}
 			if (module.getAccessControl() == 1) {
 				for (ModuleRole val : roleList)
@@ -273,7 +274,7 @@ public class SystemServiceImpl implements SystemService {
 		}
 	}
 	private List<Map<String, Object>> getSubMenu(long id, String userId) {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub		
 		List<Map<String, Object>> message = new ArrayList<Map<String, Object>>();
 		List<TModule> rows = this.systemMapper.selectSysteMenu(id, null);
 		List<ModuleRole> roleList = systemMapper.selectRoleModuleIDS(userId);
@@ -281,12 +282,10 @@ public class SystemServiceImpl implements SystemService {
 		{
 			Map<String, Object> item = new HashMap<String, Object>();
 			item.put("id", row.getId());
-			item.put("text", row.getName());
-			item.put("iconCls", row.getIcon());
-			Map<String, Object> attri = new HashMap<String, Object>();
-			attri.put("url", row.getModuleUrl());
-			attri.put("description", row.getDescription());
-			item.put("attributes", attri);
+			item.put("title", row.getName());
+			item.put("icon", row.getIcon());
+			item.put("href", row.getModuleUrl());
+			item.put("description", row.getDescription());
 			List<Map<String, Object>> data = getSubMenu(row.getId(), userId);
 			if (data.size() > 0)
 			{

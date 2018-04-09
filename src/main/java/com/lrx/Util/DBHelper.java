@@ -287,7 +287,7 @@ public class DBHelper extends JdbcDaoSupport {
 	public int queryForInt(String sql, Object[] objects) {
 		int exc = -1;
 		try {
-			exc = this.getJdbcTemplate().queryForInt(sql, objects);
+			exc = this.getJdbcTemplate().queryForObject(sql,  new Object[] { objects }, Integer.class);
 		} catch (Exception e) {
 			exc = -1;
 			logger.error(e.toString());
@@ -305,7 +305,7 @@ public class DBHelper extends JdbcDaoSupport {
 	 */
 	public int queryForInt(String sql) {
 		
-		return this.getJdbcTemplate().queryForInt(sql);
+		return this.getJdbcTemplate().queryForObject(sql, Integer.class);
 	}
 
 	/**
@@ -317,7 +317,7 @@ public class DBHelper extends JdbcDaoSupport {
 	 * @return
 	 */
 	public Long queryForLong(String sql) {
-		return this.getJdbcTemplate().queryForLong(sql);
+		return this.getJdbcTemplate().queryForObject(sql, Long.class);
 	}
 
 	/**

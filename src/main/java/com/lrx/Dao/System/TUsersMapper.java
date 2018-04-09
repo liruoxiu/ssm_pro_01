@@ -67,4 +67,6 @@ public interface TUsersMapper {
     int deleteByPrimaryKey(Long id);
     TUsers selectByPrimaryKey(Long id);
     int updatePwd(TUsers record);
+    
+    List<TUsers> selectByExamplePage(TUsersExample example);
 }

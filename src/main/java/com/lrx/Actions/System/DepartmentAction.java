@@ -12,78 +12,84 @@ import com.lrx.Model.System.TUsers;
 import com.lrx.Service.System.DepartmentService;
 
 @Controller
-public class DepartmentAction {
+@RequestMapping("/System")
+public class DepartmentAction {	
 	@Autowired
 	DepartmentService departmentService;
 
-	@RequestMapping("/System/GetDepartments")
+	@RequestMapping("/Department")
+	public String GetPageDepartment() {
+		return "SystemManager/Department";
+	}
+	
+	@RequestMapping("/GetDepartments")
 	@ResponseBody
 	public Object GetDepartments(@RequestParam(defaultValue = "-1") long id) {
 		// org.springframework.security.providers.encoding.Md5PasswordEncoder
 		return departmentService.GetDepartments(id);
 	}
 
-	@RequestMapping(value = "/System/SaveDepartment", method = RequestMethod.POST)
+	@RequestMapping(value = "/SaveDepartment", method = RequestMethod.POST)
 	@ResponseBody
 	public Object SaveDepartment(TDepartment department) {
 		return departmentService.SaveDepartment(department);
 	}
 
-	@RequestMapping(value = "/System/UpdateDepartment", method = RequestMethod.POST)
+	@RequestMapping(value = "/UpdateDepartment", method = RequestMethod.POST)
 	@ResponseBody
 	public Object UpdateDepartment(TDepartment department) {
 		return departmentService.UpdateDepartment(department);
 	}
 
-	@RequestMapping(value = "/System/DeleteDepartment", method = RequestMethod.POST)
+	@RequestMapping(value = "/DeleteDepartment", method = RequestMethod.POST)
 	@ResponseBody
 	public Object DeleteDepartment(long parentId) {
 		return departmentService.DeleteDepartment(parentId);
 	}
 
-	@RequestMapping(value = "/System/GetUsers", method = RequestMethod.POST)
+	@RequestMapping(value = "/GetUsers", method = RequestMethod.POST)
 	@ResponseBody
 	public Object GetUsers(long departmentID, int page, int rows) {
 		return departmentService.GetUsers(departmentID, page, rows);
 	}
 
-	@RequestMapping(value = "/System/SaveUser", method = RequestMethod.POST)
+	@RequestMapping(value = "/SaveUser", method = RequestMethod.POST)
 	@ResponseBody
 	public Object SaveUser(TUsers users) {
 		return departmentService.SaveUser(users);
 	}
 
-	@RequestMapping(value = "/System/UpdateUser", method = RequestMethod.POST)
+	@RequestMapping(value = "/UpdateUser", method = RequestMethod.POST)
 	@ResponseBody
 	public Object UpdateUser(TUsers users) {
 		return departmentService.UpdateUser(users);
 	}
 
-	@RequestMapping(value = "/System/DeleteUser", method = RequestMethod.POST)
+	@RequestMapping(value = "/DeleteUser", method = RequestMethod.POST)
 	@ResponseBody
 	public Object DeleteUser(long departmentId) {
 		return departmentService.DeleteUser(departmentId);
 	}
 
-	@RequestMapping(value = "/System/ResetUserPassword", method = RequestMethod.POST)
+	@RequestMapping(value = "/ResetUserPassword", method = RequestMethod.POST)
 	@ResponseBody
 	public Object ResetUserPassword(TUsers users) {
 		return departmentService.ResetUserPassword(users);
 	}
 
-	@RequestMapping(value = "/System/BackUserPassword", method = RequestMethod.POST)
+	@RequestMapping(value = "/BackUserPassword", method = RequestMethod.POST)
 	@ResponseBody
 	public Object BackUserPassword(long id) {
 		return departmentService.BackUserPassword(id);
 	}
 
-	@RequestMapping(value = "/System/LockUser", method = RequestMethod.POST)
+	@RequestMapping(value = "/LockUser", method = RequestMethod.POST)
 	@ResponseBody
 	public Object LockUser(long id, String userId) {
 		return departmentService.LockUser(id, userId);
 	}
 
-	@RequestMapping(value = "/System/UnLockUser", method = RequestMethod.POST)
+	@RequestMapping(value = "/UnLockUser", method = RequestMethod.POST)
 	@ResponseBody
 	public Object UnLockUser(long id, String userId) {
 		return departmentService.UnLockUser(id, userId);

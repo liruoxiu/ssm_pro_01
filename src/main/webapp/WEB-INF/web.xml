@@ -2,9 +2,9 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" id="WebApp_ID" version="3.1">
   <display-name>Archetype Created Web Application</display-name>
    <welcome-file-list>
-    <welcome-file>Login.jsp</welcome-file>
-    <welcome-file>Login.action</welcome-file>
-    <welcome-file>/index.jsp</welcome-file>
+   <!--  <welcome-file>Login.jsp</welcome-file> -->
+    <welcome-file>/Login.action</welcome-file>
+    <!-- <welcome-file>index.jsp</welcome-file> -->
   </welcome-file-list>
   <error-page>
     <error-code>500</error-code>
@@ -16,7 +16,11 @@
   </error-page>
   <context-param>
     <param-name>contextConfigLocation</param-name>
-    <param-value>classpath:applicationContext.xml</param-value>
+    <param-value>
+    	classpath:applicationContext.xml
+    	,classpath:spring-activiti.xml 
+    	,classpath:spring-cxf-service.xml  
+    </param-value>
   </context-param>
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
@@ -48,4 +52,21 @@
     <servlet-name>SpringMVC</servlet-name>
     <url-pattern>*.action</url-pattern>
   </servlet-mapping>
+  <!-- 配置activity 流程设计器 -->
+  <servlet-mapping>
+	<servlet-name>SpringMVC</servlet-name>
+	<url-pattern>/service/*</url-pattern>
+  </servlet-mapping>   
+  <!-- cxf webservices -->
+  <servlet>
+      <description>CXF Endpoint</description>
+      <display-name>cxf</display-name>
+      <servlet-name>cxf</servlet-name>
+      <servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
+      <load-on-startup>2</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+      <servlet-name>cxf</servlet-name>
+      <url-pattern>/webservices/*</url-pattern>
+  </servlet-mapping>    
 </web-app>

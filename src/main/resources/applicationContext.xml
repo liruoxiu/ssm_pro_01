@@ -78,24 +78,4 @@
         <property name="basePackage" value="com.lrx.Dao" />
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
     </bean>   
-    
-    
-<!--     <bean id="springProcessEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
-		<property name="dataSource" ref="dataSource"/>
-		<property name="databaseType" value="mysql" />
-		<property name="transactionManager" ref="transactionManager"/>
-		<property name="databaseSchemaUpdate" value="true" />
-		<property name="jobExecutorActivate" value="true" />
-		<property name="activityFontName" value="微软雅黑" />
-		<property name="labelFontName" value="微软雅黑" />
-	</bean>
-	<bean id="processEngineFactoryBean" class="org.activiti.spring.ProcessEngineFactoryBean">
-		<property name="processEngineConfiguration" ref="springProcessEngineConfiguration"/>
-	</bean>
-	<bean id="repositoryService" factory-bean="processEngineFactoryBean" factory-method="getRepositoryService"/>
-	<bean id="runtimeService" factory-bean="processEngineFactoryBean" factory-method="getRuntimeService"/>
-	<bean id="taskService" factory-bean="processEngineFactoryBean" factory-method="getTaskService"/>
-	<bean id="historyService" factory-bean="processEngineFactoryBean" factory-method="getHistoryService"/>
-	<bean id="identityService" factory-bean="processEngineFactoryBean" factory-method="getIdentityService"/>
-	<bean id="managementService" factory-bean="processEngineFactoryBean" factory-method="getManagementService"/> -->
 </beans>
